@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Titre de l'application
 st.title("Suivi du Chiffre d'Affaires")
@@ -24,12 +25,17 @@ st.subheader("Données saisies")
 df = pd.DataFrame(list(data.items()), columns=["Mois", "Chiffre d'Affaires"])
 st.dataframe(df)
 
-# Visualiser les données avec un graphique
+# Visualiser les données avec Matplotlib
 if st.button("Afficher le graphique"):
     st.subheader("Graphique du Chiffre d'Affaires")
     try:
-        # Convertir en index pour le graphique
-        df.set_index("Mois", inplace=True)
-        st.bar_chart(df["Chiffre d'Affaires"])
+        # Créer le graphique avec Matplotlib
+        fig, ax = plt.subplots()
+        ax.bar(df["Mois"], df["Chiffre d'Affaires"], color="skyblue")
+        ax.set_xlabel("Mois")
+        ax.set_ylabel("Chiffre d'Affaires (en euros)")
+        ax.set_title("Évolution du Chiffre d'Affaires")
+        plt.xticks(rotation=45)
+        st.pyplot(fig)
     except Exception as e:
-        st.error(f"Une erreur s'est produite : {e}")
+        st.error(f"Une erreur s'est produite lors de la génération du graphique : {e}")
