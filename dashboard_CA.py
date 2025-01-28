@@ -16,15 +16,20 @@ months = [
 # Saisie des CA par l'utilisateur
 data = {}
 for month in months:
-    ca = st.number_input(f"CA pour {month} (€)", min_value=0, step=100, key=month)
+    ca = st.number_input(f"CA pour {month} (en euros)", min_value=0, step=100, key=month)
     data[month] = ca
 
 # Afficher les données sous forme de tableau
 st.subheader("Données saisies")
-df = pd.DataFrame(list(data.items()), columns=["Mois", "Chiffre d'Affaires (€)"])
+df = pd.DataFrame(list(data.items()), columns=["Mois", "Chiffre d'Affaires"])
 st.dataframe(df)
 
 # Visualiser les données avec un graphique
 if st.button("Afficher le graphique"):
     st.subheader("Graphique du Chiffre d'Affaires")
-    st.bar_chart(df.set_index("Mois"))
+    try:
+        # Convertir en index pour le graphique
+        df.set_index("Mois", inplace=True)
+        st.bar_chart(df["Chiffre d'Affaires"])
+    except Exception as e:
+        st.error(f"Une erreur s'est produite : {e}")
